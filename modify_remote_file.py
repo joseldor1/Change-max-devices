@@ -2,10 +2,6 @@ import paramiko
 import json
 import argparse
 
-def load_config(config_path):
-    with open(config_path, 'r') as config_file:
-        return json.load(config_file)
-
 def modify_remote_file(ip, username, password, remote_path, file_name, new_devices_limit, user_type):
     try:
         # Create an SSH client
@@ -48,18 +44,15 @@ def modify_remote_file(ip, username, password, remote_path, file_name, new_devic
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Modify the devices_limit in a remote JSON file.")
     parser.add_argument("ip", help="IP address of the remote machine")
+    parser.add_argument("username", help="Username for SSH login")
+    parser.add_argument("password", help="Password for SSH login")
     parser.add_argument("new_devices_limit", type=int, help="New value for devices_limit")
     parser.add_argument("users", help="Is crew or guests")
 
     args = parser.parse_args()
     
-    config = load_config("config.json")
-    username = config["username"]
-    password = config["password"]
-    
     remote_path = "/var/www/html/config/"
     file_name = f"_{args.users}_vrc.json"
-    print(file_name)
 
     # Modify the remote file
-    modify_remote_file(args.ip, username, password, remote_path, file_name, args.new_devices_limit, args.users)
+    modify_remote_file(args.ip, args.username, args.password, remote_path, file_name, args.new_devices_limit, args.users)
