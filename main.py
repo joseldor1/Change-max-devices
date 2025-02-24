@@ -1,0 +1,1 @@
+# Entry point for the Captive Portal - Change Max Devices project
